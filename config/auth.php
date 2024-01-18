@@ -36,16 +36,13 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
         'admin' => [
-            'admin' => 'session',
-            'provider' => 'admin',
+            'driver' => 'session',
+            'provider' => 'admins', // Change 'admins' to the name of your admin provider
         ],
-
+        // ... other guards
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -65,20 +62,19 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Admin::class, // Adjust the model class accordingly
         ],
+        // ... other providers
+    ],
+
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-    ],
+
 
     /*
     |--------------------------------------------------------------------------

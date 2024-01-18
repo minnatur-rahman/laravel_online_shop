@@ -20,6 +20,6 @@ class AdminRedirectIfAuthenticated
         if (Auth::guard('admin')->check()) {
             // return redirect(RouteServiceProvider::HOME);
         }
-        return $next($request);
+        return $next($request,['admin']);
     }
 }

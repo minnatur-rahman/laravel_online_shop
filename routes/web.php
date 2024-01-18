@@ -29,5 +29,7 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::group(['middleware' => 'admin.auth'],function(){
 
+        
+
     });
 });
