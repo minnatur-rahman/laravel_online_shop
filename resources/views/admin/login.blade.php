@@ -42,7 +42,7 @@
 					  			</div>
 							</div>
                             @error('password')
-                                <p class="invalid-feedback">{{$messege}}</p>
+                                <p class="invalid-feedback">{{$message}}</p>
                             @enderror
 				  		</div>
 				  		<div class="row">
