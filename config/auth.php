@@ -36,10 +36,15 @@ return [
     */
 
     'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users', // Change 'admins' to the name of your admin provider
+        ],
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins', // Change 'admins' to the name of your admin provider
         ],
+
         // ... other guards
     ],
 
@@ -62,9 +67,13 @@ return [
     */
 
     'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // Adjust the model class accordingly
+        ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Admin::class, // Adjust the model class accordingly
+            'model' => App\Models\User::class, // Adjust the model class accordingly
         ],
         // ... other providers
     ],
