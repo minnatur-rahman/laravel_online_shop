@@ -42,8 +42,17 @@ Route::group(['prefix' => 'admin'],function(){
 
 
         Route::get('/getSlug', function(Request $request){
+            $slug = '';
+            if (!empty($request->title)){
+                $slug = Str::slug($request->title);
+            }
+            return response()->json([
+                'status' => true,
+                'slug' => $slug
 
-        });
+            ]);
+
+        })->name('getSlug');
 
 
     });
