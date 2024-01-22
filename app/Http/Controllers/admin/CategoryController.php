@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\category;
 
 class CategoryController extends Controller
@@ -36,7 +37,7 @@ class CategoryController extends Controller
             $request->session()->flash('success', 'Category add successfully');
 
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'message' => 'Category add successfully'
             ]);
 
