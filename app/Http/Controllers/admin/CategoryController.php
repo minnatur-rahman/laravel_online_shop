@@ -32,9 +32,17 @@ class CategoryController extends Controller
             $category->status = $request->status;
             $category->save();
 
+
+            $request->session()->flash('success', 'Category add successfully');
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Category add successfully'
+            ]);
+
         }else{
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'errors' => $validator->errors()
             ]);
         }
