@@ -14,13 +14,16 @@ class CategoryController extends Controller
     public function index(Request $request){
         $categories = category::latest();
 
-        if (!empty($request->get('keyWord'))){
-            $categories = $categories->where('name','like','%'.$request->get('keyWord').'%');
+        if (!empty($request->get('keyword'))){
+            $categories = $categories->where('name', 'like','%'.$request->get('keyword').'%');
         }
+
+
         $categories = $categories->paginate(10);
 
         return view('admin.category.list', compact('categories'));
     }
+
 
     public function create(){
         return view('admin.category.create');
