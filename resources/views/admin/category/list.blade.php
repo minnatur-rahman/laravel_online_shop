@@ -20,10 +20,10 @@
     <div class="container-fluid">
         @include('admin.message')
         <div class="card">
-            <form action="" method="get" >
+            <form action="" method="get">
                 <div class="card-header">
                     <div class="card-title">
-                        <button type="button" onclick="window.location.herf'{{ route("categories.index") }}'" class="btn btn-default btn-sm">Reset</button>
+                        <button onclick="window.location.href='{{ route('categories.index') }}'" type="button" class="btn btn-danger">Reset</button>
                     </div>
                     <div class="card-tools">
                         <div class="input-group input-group" style="width: 250px;">

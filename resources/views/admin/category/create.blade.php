@@ -72,7 +72,9 @@
             success : function(response){
 
                if (response["status"] == true){
-                window.location.herf="{{ route('categories.index') }}";
+
+                    window.location.herf="{{ route('categories.index') }}";
+
                     $("#name").removeClass('is-invalid')
                     .siblings('p')
                     .removeClass('invalid-feedback').html("");
