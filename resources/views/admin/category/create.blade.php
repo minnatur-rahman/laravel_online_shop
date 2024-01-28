@@ -73,7 +73,7 @@
 
                if (response["status"] == true){
 
-                    window.location.herf="{{ route('categories.index') }}";
+                    window.location.href="{{ route('categories.index') }}";
 
                     $("#name").removeClass('is-invalid')
                     .siblings('p')
