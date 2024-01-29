@@ -36,7 +36,7 @@
                             <p></p>
                         </div>
                     </div>
-                    <div class="col-mb-6">
+                    <div class="col-md-6">
                         <div class="mb-3">
                             <label for="image">Image</label>
                             <div id="image" class="dropzone dz-clickable">
@@ -162,7 +162,7 @@ const dropzone = $("#image").dropzone({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
     }, success: function(file, response){
-        $("#image_id").val(response.image_id);
+        // $("#image_id").val(response.image_id);
         //console.log(response)
     }
 });
