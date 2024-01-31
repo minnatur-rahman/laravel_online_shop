@@ -44,6 +44,9 @@ class CategoryController extends Controller
             $category->save();
 
 
+            // Save Image Here
+
+
             $request->session()->flash('success', 'Category add successfully');
 
             return response()->json([
