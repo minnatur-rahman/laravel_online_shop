@@ -25,14 +25,14 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="name">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                            <input type="text" value="{{ $category->name }}" name="name" id="name" class="form-control" placeholder="Name">
                             <p></p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="slug">Slug</label>
-                            <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="Slug">
+                            <input type="text" value="{{ $category->slug }}" readonly name="slug" id="slug" class="form-control" placeholder="Slug">
                             <p></p>
                         </div>
                     </div>
@@ -46,13 +46,19 @@
                                 </div>
                             </div>
                         </div>
+                        @if (!empty($category->image))
+                        <div>
+                            <img width="250" src="{{ assets('uploads/category/thumb/'.$category->image) }}" alt="">
+                        </div>
+                        @endif
+
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="status">Status</label>
                             <select name="status" id="status" class="form-control">
-                                <option value="1">Active</option>
-                                <option value="0">Blog</option>
+                                <option {{ ($category->status == 1) ? 'selected' : '' }} value="1">Active</option>
+                                <option {{ ($category->status == 0) ? 'selected' : '' }} value="0">Block</option>
                             </select>
                         </div>
                     </div>

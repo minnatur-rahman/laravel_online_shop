@@ -120,7 +120,7 @@ class CategoryController extends Controller
             return redirect()->route('categories.index');
         }
 
-       return view('admin.category.edit');
+       return view('admin.category.edit', compact('category'));
     }
 
     public function update(){
