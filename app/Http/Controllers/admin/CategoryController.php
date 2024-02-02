@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\category;
 use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
-use Image;
-use Intervention\Image\ImageServiceProvider;
+use Illuminate\Validation\Rules\Unique;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+
 
 
 
@@ -50,24 +52,29 @@ class CategoryController extends Controller
             // dd($category);
 
             // Save Image Here
-            if (!empty($request->image_id)){
-                $tempImage = TempImage::find($request->image_id);
-                $extArray = explode('.', $tempImage->name);
-                $ext = last($extArray);
+            if ($request->file('image_id')){
+                // $tempImage = TempImage::find($request->image_id);
+                // $extArray = explode('.', $tempImage->name);
+                // $ext = last($extArray);
 
-                $newImageName = $category->id.'.'.$ext;
-                $sPath = public_path().'/temp/'.$tempImage->name;
-                $dPath = public_path().'/uploads/category/'.$newImageName;
-                File::copy($sPath,$dPath);
+                // $newImageName = $category->id.'.'.$ext;
+                // $sPath = public_path().'/temp/'.$tempImage->name;
+                // $dPath = public_path().'/uploads/category/'.$newImageName;
+                // File::copy($sPath,$dPath);
 
                 // Generate Image Thumbnail
-                $dPath = public_path().'/uploads/category/thumb'.$newImageName;
-                $img = Image::make($sPath);
-                $img->resize(450,600);
-                $img->save($dPath);
 
-                $category->image = $newImageName;
-                $category->save();
+                $manager = new ImageManager(new Driver());
+                $name_gen = hexdec(Uniqid()).'.'.$request->file('image_id')->getClientOriginalExtension();
+                $img = $manager->read($request->file('image_id'));
+
+                // $dPath = public_path().'/uploads/category/thumb'.$newImageName;
+                // $img = Image::make($sPath);
+                // $img->resize(450,600);
+                // $img->save($dPath);
+
+                // $category->image = $newImageName;
+                // $category->save();
 
             }
             //    $category->save();
