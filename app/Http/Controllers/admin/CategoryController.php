@@ -51,31 +51,29 @@ class CategoryController extends Controller
             // dd($category);
 
             // Save Image Here
-
             if ($request->file('image_id')){
                 $manager = new ImageManager(new Driver());
-                $new_name = $request->name.'.'.$request->file('image_id')->getClientOriginalExtension();
                 $img = $manager->read($request->file('image_id'));
-                $extArray = explode('.', $img->name);
+                $tempImage = TempImage::find($request->image_id);
+                $extArray = explode('.', $tempImage->name);
                 $ext = last($extArray);
 
-                $sPath = public_path().'/temp/'.$ext;
-                $dPath = public_path().'/uploads/category/'.$new_name;
+
+                $newImageName = $category->id.'.'.$ext;
+                $sPath = public_path().'/temp/'.$tempImage->name;
+                $dPath = public_path().'/uploads/category/'.$newImageName;
                 File::copy($sPath,$dPath);
 
-
                 // Generate Image Thumbnail
-                $dPath = public_path().'/uploads/category/thumb'.$new_name;
-                $img = Image::make('');
+                $dPath = public_path().'/uploads/category/thumb'.$newImageName;
+                $img = Image::make($sPath);
                 $img->resize(450,600);
                 $img->save($dPath);
 
-                $category->image = $new_name;
+                $category->image = $newImageName;
                 $category->save();
 
             }
-
-
 
             // if (!empty($request->image_id)){
             //     $tempImage = TempImage::find($request->image_id);
@@ -116,8 +114,13 @@ class CategoryController extends Controller
         }
     }
 
-    public function edit(){
+    public function edit($categoryId, Request $request){
+        $category = Category::find($categoryId);
+        if (empty($category)){
+            return redirect()->route('categories.index');
+        }
 
+       return view('admin.category.edit');
     }
 
     public function update(){
