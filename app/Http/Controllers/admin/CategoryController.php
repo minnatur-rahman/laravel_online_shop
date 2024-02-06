@@ -51,51 +51,31 @@ class CategoryController extends Controller
             // dd($category);
 
             // Save Image Here
-            if ($request->file('image_id')){
+            if ($request->hasFile('image_id')){
                 $manager = new ImageManager(new Driver());
+                $new_name = $request->name.".".$request->file('image_id')->getClientOriginalExtension();
                 $img = $manager->read($request->file('image_id'));
-                $tempImage = TempImage::find($request->image_id);
-                $extArray = explode('.', $tempImage->name);
-                $ext = last($extArray);
+                $img->toJpeg(80)->save(base_path('/temp/'.$new_name));
 
 
-                $newImageName = $category->id.'.'.$ext;
-                $sPath = public_path().'/temp/'.$tempImage->name;
-                $dPath = public_path().'/uploads/category/'.$newImageName;
-                File::copy($sPath,$dPath);
+
+
+                // $newImageName = $category->id.'.'.$ext;
+                // $sPath = public_path().'/temp/'.$tempImage->name;
+                // $dPath = public_path().'/uploads/category/'.$newImageName;
+                // File::copy($sPath,$dPath);
 
                 // Generate Image Thumbnail
-                $dPath = public_path().'/uploads/category/thumb'.$newImageName;
-                $img = Image::make($sPath);
-                $img->resize(450,600);
-                $img->save($dPath);
+                // $dPath = public_path().'/uploads/category/thumb'.$newImageName;
+                // $img = Image::make($sPath);
+                // $img->resize(450,600);
+                // $img->save($dPath);
 
-                $category->image = $newImageName;
-                $category->save();
+                // $category->image = $newImageName;
+                // $category->save();
 
             }
 
-            // if (!empty($request->image_id)){
-            //     $tempImage = TempImage::find($request->image_id);
-            //     $extArray = explode('.', $tempImage->name);
-            //     $ext = last($extArray);
-
-            //     $newImageName = $category->id.'.'.$ext;
-            //     $sPath = public_path().'/temp/'.$tempImage->name;
-            //     $dPath = public_path().'/uploads/category/'.$newImageName;
-            //     File::copy($sPath,$dPath);
-
-            //     // Generate Image Thumbnail
-            //     $dPath = public_path().'/uploads/category/thumb'.$newImageName;
-            //     $img = Image::make($sPath);
-            //     $img->resize(450,600);
-            //     $img->save($dPath);
-
-            //     $category->image = $newImageName;
-            //     $category->save();
-
-            // }
-            //    $category->save();
 
 
 
@@ -123,7 +103,7 @@ class CategoryController extends Controller
        return view('admin.category.edit', compact('category'));
     }
 
-    public function update(){
+    public function update($categoryId,  Request $request){
 
     }
 
