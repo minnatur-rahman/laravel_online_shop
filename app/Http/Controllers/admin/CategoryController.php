@@ -46,12 +46,12 @@ class CategoryController extends Controller
             $category->save();
             // Save Image Here
             if ($request->hasFile('image_id')){
-                $manager = new ImageManager(new Driver());
-                $new_name = $request->name.".".$request->file('image_id')->getClientOriginalExtension();
-                $img = $manager->read($request->file('image_id'));
-                $img->toJpeg(80)->save(base_path('/temp/'.$new_name));
-                $extArray = explode('.', $new_name);
-                $ext = last($extArray);
+                // $manager = new ImageManager(new Driver());
+                // $new_name = $request->name.".".$request->file('image_id')->getClientOriginalExtension();
+                // $img = $manager->read($request->file('image_id'));
+                // $img->toJpeg(80)->save(base_path('/temp/'.$new_name));
+                // $extArray = explode('.', $new_name);
+                // $ext = last($extArray);
                 //  new_name create
 
 
