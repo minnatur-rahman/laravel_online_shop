@@ -45,14 +45,20 @@ class CategoryController extends Controller
             $category->status = $request->status;
             $category->save();
             // Save Image Here
-            if ($request->hasFile('image_id')){
-                // $manager = new ImageManager(new Driver());
-                // $new_name = $request->name.".".$request->file('image_id')->getClientOriginalExtension();
-                // $img = $manager->read($request->file('image_id'));
-                // $img->toJpeg(80)->save(base_path('/temp/'.$new_name));
-                // $extArray = explode('.', $new_name);
-                // $ext = last($extArray);
-                //  new_name create
+            if(!empty($request->image_id)){
+                $tempImage = TempImage::find($request->image_id);
+                $extArray =  explode('.'.$tempImage->name);
+                $ext = last($extArray);
+
+                $newImageName = $category->id.'.'.$ext;
+                $sPath = public_path().'/temp/'.$tempImage->name;
+                $dPath = public_path().'/uploads/category/'.$newImageName;
+                File::copy($sPath,$dPath);
+
+                $category->image = $newImageName;
+                $category->save();
+            }
+
 
 
                   // Path to the original image
