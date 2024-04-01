@@ -10,7 +10,7 @@ use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManagerStatic as Image;
+use Image;
 
 
 class CategoryController extends Controller
@@ -44,10 +44,11 @@ class CategoryController extends Controller
             $category->slug = $request->slug;
             $category->status = $request->status;
             $category->save();
+
             // Save Image Here
             if(!empty($request->image_id)){
                 $tempImage = TempImage::find($request->image_id);
-                $extArray =  explode('.'.$tempImage->name);
+                $extArray =  explode('.',$tempImage->name);
                 $ext = last($extArray);
 
                 $newImageName = $category->id.'.'.$ext;
@@ -55,45 +56,29 @@ class CategoryController extends Controller
                 $dPath = public_path().'/uploads/category/'.$newImageName;
                 File::copy($sPath,$dPath);
 
+                // Generate Image Thumbnail
+                $thumbnailPath = public_path().'/uploads/category/thumb/'.$newImageName;
+                Image::make($sPath)->fit(100, 100)->save($thumbnailPath);
+
                 $category->image = $newImageName;
                 $category->save();
             }
 
-
-
-                  // Path to the original image
-                $originalImagePath = public_path('upload/category/'.$new_name);
-
-                  // Path to save the thumbnail
-                $thumbnailPath = public_path('upload/category/thumb'.$new_name);
-
-                   // Create thumbnail
-                Image::make($originalImagePath)
-                ->fit(100, 100) // Adjust dimensions as needed
-                ->save($thumbnailPath);
-
-    // Optionally, return a response or do something else with the thumbnail
-
-
-                $category->image = $newImageName;
-                $category->save();
-
-            }
-
-            $request->session()->flash('success', 'Category add successfully');
+            $request->session()->flash('success', 'Category added successfully');
 
             return response()->json([
                 'status' => true,
-                'message' => 'Category add successfully'
+                'message' => 'Category added successfully'
             ]);
 
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
             ]);
         }
     }
+
 
     public function edit($categoryId, Request $request){
         $category = Category::find($categoryId);
@@ -112,3 +97,4 @@ class CategoryController extends Controller
 
     }
 }
+
