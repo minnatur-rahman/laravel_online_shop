@@ -10,13 +10,11 @@ use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-
-
+use Intervention\Image\ImageManagerStatic as Image;
 
 
 class CategoryController extends Controller
 {
-
     public function index(Request $request){
         $categories = category::latest();
 
@@ -24,12 +22,10 @@ class CategoryController extends Controller
             $categories = $categories->where('name', 'like','%'.$request->get('keyword').'%');
         }
 
-
         $categories = $categories->paginate(10);
 
         return view('admin.category.list', compact('categories'));
     }
-
 
     public function create(){
         return view('admin.category.create');
@@ -48,8 +44,6 @@ class CategoryController extends Controller
             $category->slug = $request->slug;
             $category->status = $request->status;
             $category->save();
-            // dd($category);
-
             // Save Image Here
             if ($request->hasFile('image_id')){
                 $manager = new ImageManager(new Driver());
@@ -58,26 +52,27 @@ class CategoryController extends Controller
                 $img->toJpeg(80)->save(base_path('/temp/'.$new_name));
                 $extArray = explode('.', $new_name);
                 $ext = last($extArray);
-
                 //  new_name create
-                $newImageName = $category->id.'.'.$ext;
-                $sPath = public_path().'/temp/'.$new_name;
-                $dPath = public_path().'/uploads/category/'.$newImageName;
-                File::copy($sPath,$dPath);
 
-                // Generate Image Thumbnail
-                $dPath = public_path().'/uploads/category/thumb'.$newImageName;
-                $img = Image::make($sPath);
-                $img->resize(450,600);
-                $img->save($dPath);
+
+                  // Path to the original image
+                $originalImagePath = public_path('upload/category/'.$new_name);
+
+                  // Path to save the thumbnail
+                $thumbnailPath = public_path('upload/category/thumb'.$new_name);
+
+                   // Create thumbnail
+                Image::make($originalImagePath)
+                ->fit(100, 100) // Adjust dimensions as needed
+                ->save($thumbnailPath);
+
+    // Optionally, return a response or do something else with the thumbnail
+
 
                 $category->image = $newImageName;
                 $category->save();
 
             }
-
-
-
 
             $request->session()->flash('success', 'Category add successfully');
 
