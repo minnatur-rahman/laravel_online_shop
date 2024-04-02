@@ -83,8 +83,8 @@
         var element = $(this);
         $("button[type=submit]").prop('disabled',true);
         $.ajax({
-            url : '{{ route("categories.store") }}',
-            type : 'post',
+            url : '{{ route("categories.update",$category->id) }}',
+            type : 'put',
             data : element.serializeArray(),
             dataType : 'json',
             success : function(response){
