@@ -106,7 +106,21 @@
 @section('customjs')
     <script>
         function deleteCategory(id){
+            $.ajax({
+            url : '{{ route("categories.update",$category->id) }}',
+            type : 'put',
+            data : element.serializeArray(),
+            dataType : 'json',
+            success : function(response){
+               $("button[type=submit]").prop('disabled',false);
+               if (response["status"] == true){
 
+                    window.location.href="{{ route('categories.index') }}";
+               } else{
+
+               }
+            }
+         });
         }
     </script>
 @endsection
