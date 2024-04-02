@@ -165,6 +165,19 @@ class CategoryController extends Controller
         if (empty($category)){
             return redirect()->route('categories.index');
         }
+
+        File::delete(public_path().'/uploads/category/thumb/'.$category->image);
+        File::delete(public_path().'/uploads/category/'.$category->image);
+
+        $category->delete();
+
+        $request->session()->flash('success','Category Deleted Successfully');
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Category Deleted Successfully'
+        ]);
+
     }
 }
 
