@@ -106,21 +106,29 @@
 @section('customjs')
     <script>
         function deleteCategory(id){
-            $.ajax({
-            url : '{{ route("categories.update",$category->id) }}',
-            type : 'put',
-            data : element.serializeArray(),
-            dataType : 'json',
-            success : function(response){
-               $("button[type=submit]").prop('disabled',false);
-               if (response["status"] == true){
+
+            var url = '{{  route("categories.delete", "ID") }}'
+            var newUrl = url.replace("ID".id)
+
+           if (confirm("Are you sure you want to delete ?")){
+               $.ajax({
+               url : newUrl,
+               type : 'delete',
+               data : {},
+               headers: {
+                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+               },
+               dataType : 'json',
+               success : function(response){
+
+               if (response["status"]){
 
                     window.location.href="{{ route('categories.index') }}";
-               } else{
-
                }
             }
          });
+           }
+
         }
     </script>
 @endsection
