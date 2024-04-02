@@ -76,8 +76,8 @@ class CategoryController extends Controller
                 'status' => false,
                 'errors' => $validator->errors()
             ]);
-        }
     }
+}
 
 
     public function edit($categoryId, Request $request){
@@ -90,7 +90,51 @@ class CategoryController extends Controller
     }
 
     public function update($categoryId,  Request $request){
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'slug' => 'required|unique:categories',
+        ]);
 
+        if ($validator->passes()){
+
+            $category = new Category();
+            $category->name = $request->name;
+            $category->slug = $request->slug;
+            $category->status = $request->status;
+            $category->save();
+
+            // Save Image Here
+            if(!empty($request->image_id)){
+                $tempImage = TempImage::find($request->image_id);
+                $extArray =  explode('.',$tempImage->name);
+                $ext = last($extArray);
+
+                $newImageName = $category->id.'.'.$ext;
+                $sPath = public_path().'/temp/'.$tempImage->name;
+                $dPath = public_path().'/uploads/category/'.$newImageName;
+                File::copy($sPath,$dPath);
+
+                // Generate Image Thumbnail
+                $thumbnailPath = public_path().'/uploads/category/thumb/'.$newImageName;
+                Image::make($sPath)->fit(100, 100)->save($thumbnailPath);
+
+                $category->image = $newImageName;
+                $category->save();
+            }
+
+            $request->session()->flash('success', 'Category added successfully');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Category added successfully'
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+    }
     }
 
     public function destroy(){
