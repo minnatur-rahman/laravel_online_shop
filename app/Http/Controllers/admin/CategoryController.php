@@ -58,7 +58,10 @@ class CategoryController extends Controller
 
                 // Generate Image Thumbnail
                 $thumbnailPath = public_path().'/uploads/category/thumb/'.$newImageName;
-                Image::make($sPath)->fit(100, 100)->save($thumbnailPath);
+                $img->fit(450, 600, function ($constraint) {
+                $constraint->upsize();
+                  })
+                ->save($thumbnailPath);
 
                 $category->image = $newImageName;
                 $category->save();
@@ -128,7 +131,10 @@ class CategoryController extends Controller
 
                 // Generate Image Thumbnail
                 $thumbnailPath = public_path().'/uploads/category/thumb/'.$newImageName;
-                Image::make($sPath)->fit(100, 100)->save($thumbnailPath);
+                $img = Image::make($sPath);
+                $img->fit(450, 600, function ($constraint) {
+                $constraint->upsize();
+                  })->save($thumbnailPath);
 
                 $category->image = $newImageName;
                 $category->save();
@@ -154,8 +160,11 @@ class CategoryController extends Controller
     }
     }
 
-    public function destroy(){
-
+    public function destroy($categoryId, Request $request){
+        $category = Category::find($categoryId);
+        if (empty($category)){
+            return redirect()->route('categories.index');
+        }
     }
 }
 
