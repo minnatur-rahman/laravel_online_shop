@@ -163,7 +163,12 @@ class CategoryController extends Controller
     public function destroy($categoryId, Request $request){
         $category = Category::find($categoryId);
         if (empty($category)){
-            return redirect()->route('categories.index');
+            $request->session()->flash('error','Category not found');
+            return response()->json([
+                'status' => false,
+                'message' => 'Category not found'
+            ]);
+            // return redirect()->route('categories.index');
         }
 
         File::delete(public_path().'/uploads/category/thumb/'.$category->image);
@@ -177,6 +182,7 @@ class CategoryController extends Controller
             'status' => false,
             'message' => 'Category Deleted Successfully'
         ]);
+
 
     }
 }
