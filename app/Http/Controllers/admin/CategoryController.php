@@ -113,13 +113,15 @@ class CategoryController extends Controller
             $category->status = $request->status;
             $category->save();
 
+            $oldImage= $category->image;
+
             // Save Image Here
             if(!empty($request->image_id)){
                 $tempImage = TempImage::find($request->image_id);
                 $extArray =  explode('.',$tempImage->name);
                 $ext = last($extArray);
 
-                $newImageName = $category->id.'.'.$ext;
+                $newImageName = $category->id.'-'.time().'.'.$ext;
                 $sPath = public_path().'/temp/'.$tempImage->name;
                 $dPath = public_path().'/uploads/category/'.$newImageName;
                 File::copy($sPath,$dPath);
@@ -130,6 +132,11 @@ class CategoryController extends Controller
 
                 $category->image = $newImageName;
                 $category->save();
+
+                //___delete old Image Here___//
+                File::delete(public_path().'/uploads/category/thumb/'.$oldImage);
+                File::delete(public_path().'/uploads/category/'.$oldImage);
+
             }
 
             $request->session()->flash('success', 'Category Updated Successfully');
